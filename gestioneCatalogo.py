@@ -1,13 +1,21 @@
 import gestioneData
+def printGeneri(genereCatalogo):
+    listaGeneri=[]
+    while True:
+        genere=input("Inserisci il genere del film o serie tv tra: {}\n0 per uscire!\n> ".format(", ".join(genereCatalogo))).lower().capitalize()
+        if genere in genereCatalogo:
+            listaGeneri.append(genere)
+            print("\ngenere inserito!\n")
+        elif genere=="0":
+            print("\nsei uscito correttamente!\n")
+            break
+    return listaGeneri
+    
 def inserimentoCatalogo(catalogo):
     titolo=input("Titolo del film o serie tv\n> ").capitalize()
 
-    #e se appartenesse a più generi?
     genereCatalogo={'Avventura','Azione','Commedia','Fantascienza','Fantasy','Horror','Musical','Thriller','Supereroi'}
-    genere=input("Inserisci il genere del film o serie tv tra: {}\n> ".format(", ".join(genereCatalogo))).lower().capitalize()
-    if genere not in genereCatalogo:
-        print("Genere non valido!")
-        return
+    genere=printGeneri(genereCatalogo)
     
     tipo=input("Inserisci il tipo (Film o Serie TV)\n> ").lower()
     if tipo not in {"film","serie tv"}:
@@ -30,12 +38,11 @@ def inserimentoCatalogo(catalogo):
 
     data_modifica=data_inserimento=gestioneData.dataInsMod().strftime("%Y-%m-%d")
 
-    #impostiamo a 0?
     visualizzazioni=0
 
     record={
         'titolo': titolo,
-        'genere': genere,
+        'genere': genere, #print se ci sono più generi?
         'tipo': tipo,
         'durata': durata,
         'episodi': episodi,
@@ -46,11 +53,24 @@ def inserimentoCatalogo(catalogo):
     catalogo.append(record)
     print(f"Perfetto!\nHai inserito correttamente {titolo} al catalogo!")
 
-def modificaCatalogo():
-    print("ciao")
+def modificaCatalogo(catalogo):
+    #rivedi
+    print("<--- MODIFICA CATALOGO --->\n")
+    nTitolo=input("Quale titolo si vuole modificare?").lower().capitalize()
+    for record in catalogo:
+        for chiave in record:
+            if(chiave['titolo']==nTitolo):
+                chiave[titolo]=nTitolo
+                #meglio fare un menù o continuare così?
 
-def eliminaCatalogo():
-    print("ciao")    
+def eliminaCatalogo(catalogo):
+    #rivedi
+    print("<--- ELIMINA ELEMENTO DAL CATALOGO --->\n")
+    nTitolo=input("Quale titolo vuoi cancellare?").lower().capitalize()
+    for record in catalogo:
+        for chiave in record:
+            if(chiave==nTitolo):
+                record.popitem()
 
 def printCatalogo(catalogo):
     print("\n<--- PRINT CATALOGO --->\n")
@@ -71,8 +91,8 @@ def main():
         match(scelta):
             case 0: print("ciao ciao")
             case 1: inserimentoCatalogo(catalogo)
-            case 2: modificaCatalogo()
-            case 3: eliminaCatalogo()
+            case 2: modificaCatalogo(catalogo)
+            case 3: eliminaCatalogo(catalogo)
             case 4: printCatalogo(catalogo)
             case __: print("errore!")
 
