@@ -3,12 +3,16 @@ def printGeneri(genereCatalogo):
     listaGeneri=[]
     while True:
         genere=input("Inserisci il genere del film o serie tv tra: {}\n0 per uscire!\n> ".format(", ".join(genereCatalogo))).lower().capitalize()
-        if genere in genereCatalogo:
-            listaGeneri.append(genere)
-            print("\ngenere inserito!\n")
-        elif genere=="0":
-            print("\nsei uscito correttamente!\n")
+        if genere==0:
+            print("\nSei uscito correttamente!\n")
             break
+        elif not genere:
+            print("Inserisci un genere")
+        elif genere in listaGeneri:
+            print("Genere già inserito! Scegline un altro")
+        elif genere in genereCatalogo:
+            listaGeneri.append(genere)
+            print("\nGenere inserito!\n")
     return listaGeneri
     
 def inserimentoCatalogo(catalogo):
@@ -33,25 +37,36 @@ def inserimentoCatalogo(catalogo):
                 else:
                     break
             except ValueError:
-
                 print("Per favore, inserisci un numero valido per la durata!")
     elif(tipo=="serie tv"):
-        try:
-            episodi=int(input(f"Quanti episodi ha la serie {titolo}?\n> "))
-        except ValueError:
-            print("inserisci un numero di episodi valido!")
+        while True:
+            try:
+                episodi=int(input(f"Quanti episodi ha la serie {titolo}?\n> "))
+                if episodi<=0:
+                    print("Il numero degli episodi dev'essere positivo!")
+                else:
+                    break
+            except ValueError:
+                print("inserisci un numero di episodi valido!")
 
     protagonista=input("Inserisci il nome del protagonista\n> ")
 
     data_uscita=gestioneData.dataUscita()
 
     data_modifica=data_inserimento=gestioneData.dataInsMod().strftime("%Y-%m-%d")
-
-    visualizzazioni=input("Inserisci il numero di visualizzazioni!\n> ")
+    while True:
+        try:
+            visualizzazioni=int(input("Inserisci il numero di visualizzazioni!\n> "))
+            if(visualizzazioni<0):
+                print("Il numero di visualizzazione non può essere negativo!")
+            else:
+                break
+        except ValueError:
+            print("Inserisci un numero valido!")
 
     record={
         'titolo': titolo,
-        'genere': genere, #print se ci sono più generi?
+        'genere': genere,
         'tipo': tipo,
         'durata': durata,
         'episodi': episodi,
@@ -72,26 +87,27 @@ def menuModificaCatalogo(catalogo):
         print("0 - Esci")
         print("1 - Modifica titolo;")
         print("2 - Modifica genere;")
-        print("3 - Modifica visualizzazioni;")
+        print("3 - Modifica il protagonista;")
         scelta=int(input("> "))
         match scelta:
             case 0: break
             case 1: modificaTitolo(catalogo)
             case 2: modificaGenere(catalogo)
-            case 3: modificaVisualizzazioni(catalogo)
+            case 3: modificaProtagonista(catalogo)
             case __: print("numero non valido!")
 
 def modificaTitolo(catalogo):
     print("<--- MODIFICA TITOLO --->\n")
     titolo=input("Quale titolo si vuole modificare?\n> ").lower().capitalize()
-    nTitolo=input("Nuovo titolo > ")
     for record in catalogo:
         if(record['titolo']==titolo):
+            print(f"Titolo attuale: {record['titolo']}")
+            nTitolo=input("Nuovo titolo > ").capitalize()
             record['titolo']=nTitolo
+            record['data_modifica']=gestioneData.dataInsMod().strftime("%Y-%m-%d")
             print("Titolo modificato!")
-            break
-        else:
-            print("Titolo insesistente!")
+            return
+    print("Titolo insesistente!")
 
 def modificaGenere(catalogo):
     print("<--- MODIFICA GENERE --->\n")
@@ -102,36 +118,33 @@ def modificaGenere(catalogo):
             genereCatalogo={'Avventura','Azione','Commedia','Fantascienza','Fantasy','Horror','Musical','Thriller','Supereroi'}
             nuoviGeneri=printGeneri(genereCatalogo)
             record['genere']=nuoviGeneri 
+            record['data_modifica']=gestioneData.dataInsMod().strftime("%Y-%m-%d")
             print("Genere modificato con successo!")
-            break
-    else:
-        print("Titolo inesistente!")
+            return
+    print("Titolo inesistente!")
 
-def modificaVisualizzazioni(catalogo):
-    print("<--- MODIFICA VISUALIZZAZIONI --->\n")
+def modificaProtagonista(catalogo):
+    print("<--- MODIFICA PROTAGONISTA --->\n")
     titolo=input("Di quale titolo vuoi aggiornare il protagonista? ").lower().capitalize()
     for record in catalogo:
         if record['titolo']==titolo:
-            print(f"Protagonista per {titolo}: {record['visualizzazioni']}")
-            try:
-                nProtagonista=input("Inserisci il nuovo protagonista\n> ")
-            except ValueError():
-                print("non valido!")
+            print(f"Protagonista per {titolo}: {record['protagonista']}")
+            nProtagonista=input("Inserisci il nuovo protagonista\n> ")
             record['protagonista']=nProtagonista
-        else:
-            print("Titolo inesistente!")
+            record['data_modifica']=gestioneData.dataInsMod().strftime("%Y-%m-%d")
+            print("Protagonista aggiornato con successo!")
+            return
+    print("Titolo inesistente!")
 
 def eliminaCatalogo(catalogo):
-    #rivedi
     print("<--- ELIMINA ELEMENTO DAL CATALOGO --->\n")
     titolo=input("Quale titolo vuoi cancellare?").lower().capitalize()
     for record in catalogo:
         if(record['titolo']==titolo):
                 catalogo.remove(record)
                 print(f"Titolo '{titolo}' rimosso!")
-                break
-        else:
-            print("Titolo inesistente!")
+                return
+    print("Titolo inesistente!")
 
 def printCatalogo(catalogo):
     print("\n<--- PRINT CATALOGO --->\n")
