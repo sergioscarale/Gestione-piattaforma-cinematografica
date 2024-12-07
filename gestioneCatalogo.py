@@ -24,12 +24,17 @@ def inserimentoCatalogo(catalogo):
     
     durata=None
     episodi=None
-    if(tipo=="film"):
-        try:
-            #fai un controllo per i minuti
-            durata=input(f"Inserisci la durata del film {titolo} in minuti.\n> ")
-        except ValueError:
-            print("inserisci una durata valida!")
+    if tipo == "film":
+        while True:
+            try:
+                durata = int(input(f"Inserisci la durata del film {titolo} in minuti.\n> "))
+                if durata <= 0 or durata > 600:
+                    print("La durata deve essere un numero positivo tra 1 e 600 minuti.")
+                else:
+                    break
+            except ValueError:
+
+                print("Per favore, inserisci un numero valido per la durata!")
     elif(tipo=="serie tv"):
         try:
             episodi=int(input(f"Quanti episodi ha la serie {titolo}?\n> "))
@@ -60,7 +65,7 @@ def modificaCatalogo(catalogo):
     for record in catalogo:
         for chiave in record:
             if(chiave['titolo']==nTitolo):
-                chiave[titolo]=nTitolo
+                chiave['titolo']=nTitolo
                 #meglio fare un menù o continuare così?
 
 def eliminaCatalogo(catalogo):
@@ -75,9 +80,17 @@ def eliminaCatalogo(catalogo):
 def printCatalogo(catalogo):
     print("\n<--- PRINT CATALOGO --->\n")
     for record in catalogo:
-        for chiave in record:
-            print(f"{chiave}: {record[chiave]}")
-
+        print(f"Titolo: {record['titolo']}")
+        print(f"Genere: {', '.join(record['genere'])}")  
+        print(f"Tipo: {record['tipo']}")
+        if record['tipo'] == "film":
+            print(f"Durata: {record['durata']} minuti")
+        elif record['tipo'] == "serie tv":
+            print(f"Episodi: {record['episodi']}")
+        print(f"Data di inserimento: {record['data_inserimento']}")
+        print(f"Data di modifica: {record['data_modifica']}")
+        print(f"Visualizzazioni: {record['visualizzazioni']}")
+       
 def main():
     catalogo=[]
     scelta=1
