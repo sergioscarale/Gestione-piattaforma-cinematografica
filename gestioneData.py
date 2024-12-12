@@ -1,10 +1,12 @@
 from datetime import datetime
 def dataInsMod():
-    data=datetime.now()
-    return data 
+    return datetime.now()
 
 def dataUscita():
-    data=input("Inserisci la data di uscita\n> ")
-    formato="%Y-%m-%d"
-    data_uscita=datetime.strptime(data,formato).date()
-    return data_uscita
+    while True:
+        try:
+            data=input("Inserisci la data di uscita\n> ")
+            formato="%Y-%m-%d"
+            return datetime.strptime(data,formato).date()
+        except ValueError:
+            print("data non valida")

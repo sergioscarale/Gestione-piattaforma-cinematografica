@@ -1,9 +1,11 @@
 import gestioneData
+from catalogo import *
+
 def printGeneri(genereCatalogo):
     listaGeneri=[]
     while True:
         genere=input("Inserisci il genere del film o serie tv tra: {}\n0 per uscire!\n> ".format(", ".join(genereCatalogo))).lower().capitalize()
-        if genere==0:
+        if genere=="0":
             print("\nSei uscito correttamente!\n")
             break
         elif not genere:
@@ -13,10 +15,15 @@ def printGeneri(genereCatalogo):
         elif genere in genereCatalogo:
             listaGeneri.append(genere)
             print("\nGenere inserito!\n")
+        else:
+            print("Genere non valido")
     return listaGeneri
     
 def inserimentoCatalogo(catalogo):
     titolo=input("Titolo del film o serie tv\n> ").capitalize()
+    if not titolo:
+        print("inserisci un titolo valido")
+        return
 
     genereCatalogo={'Avventura','Azione','Commedia','Fantascienza','Fantasy','Horror','Musical','Thriller','Supereroi'}
     genere=printGeneri(genereCatalogo)
@@ -26,13 +33,13 @@ def inserimentoCatalogo(catalogo):
         print("puoi inserire solo film o serie tv!")
         return
     
-    durata=None
+    durataMinuti=None
     episodi=None
     if tipo == "film":
         while True:
             try:
-                durata = int(input(f"Inserisci la durata del film {titolo} in minuti.\n> "))
-                if durata <= 0 or durata > 600:
+                durataMinuti=int(input(f"Inserisci la durata del film {titolo} in minuti.\n> "))
+                if durataMinuti<=0 or durataMinuti>600:
                     print("La durata deve essere un numero positivo tra 1 e 600 minuti.")
                 else:
                     break
@@ -50,6 +57,9 @@ def inserimentoCatalogo(catalogo):
                 print("inserisci un numero di episodi valido!")
 
     protagonista=input("Inserisci il nome del protagonista\n> ")
+    if not protagonista:
+        print("Inserisci un protagonista valido")
+        return
 
     data_uscita=gestioneData.dataUscita()
 
@@ -64,18 +74,7 @@ def inserimentoCatalogo(catalogo):
         except ValueError:
             print("Inserisci un numero valido!")
 
-    record={
-        'titolo': titolo,
-        'genere': genere,
-        'tipo': tipo,
-        'durata': durata,
-        'episodi': episodi,
-        'protagonista': protagonista,
-        'data_uscita' : data_uscita,
-        'data_inserimento': data_inserimento,
-        'data_modifica': data_modifica,
-        'visualizzazioni': visualizzazioni
-    }
+    record=creaRecord(titolo,set(genere),tipo,durataMinuti,episodi,visualizzazioni,protagonista,data_uscita)
     catalogo.append(record)
     print(f"Perfetto!\nHai inserito correttamente {titolo} al catalogo!")
 
