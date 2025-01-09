@@ -60,10 +60,9 @@ def inserimentoCatalogo(catalogo):
     if not protagonista:
         print("Inserisci un protagonista valido")
         return
-
+    
     data_uscita=gestioneData.dataUscita()
 
-    data_modifica=data_inserimento=gestioneData.dataInsMod().strftime("%Y-%m-%d")
     while True:
         try:
             visualizzazioni=int(input("Inserisci il numero di visualizzazioni!\n> "))
@@ -103,7 +102,7 @@ def modificaTitolo(catalogo):
             print(f"Titolo attuale: {record['titolo']}")
             nTitolo=input("Nuovo titolo > ").capitalize()
             record['titolo']=nTitolo
-            record['data_modifica']=gestioneData.dataInsMod().strftime("%Y-%m-%d")
+            record['data_modifica']=gestioneData.dataInsMod().strftime("%Y-%m-%d %H:%M:%S")
             print("Titolo modificato!")
             return
     print("Titolo insesistente!")
@@ -117,7 +116,7 @@ def modificaGenere(catalogo):
             genereCatalogo={'Avventura','Azione','Commedia','Fantascienza','Fantasy','Horror','Musical','Thriller','Supereroi'}
             nuoviGeneri=printGeneri(genereCatalogo)
             record['genere']=nuoviGeneri 
-            record['data_modifica']=gestioneData.dataInsMod().strftime("%Y-%m-%d")
+            record['data_modifica']=gestioneData.dataInsMod().strftime("%Y-%m-%d %H:%M:%S")
             print("Genere modificato con successo!")
             return
     print("Titolo inesistente!")
@@ -130,14 +129,14 @@ def modificaProtagonista(catalogo):
             print(f"Protagonista per {titolo}: {record['protagonista']}")
             nProtagonista=input("Inserisci il nuovo protagonista\n> ")
             record['protagonista']=nProtagonista
-            record['data_modifica']=gestioneData.dataInsMod().strftime("%Y-%m-%d")
+            record['data_modifica']=gestioneData.dataInsMod().strftime("%Y-%m-%d %H:%M:%S")
             print("Protagonista aggiornato con successo!")
             return
     print("Titolo inesistente!")
 
 def eliminaCatalogo(catalogo):
     print("<--- ELIMINA ELEMENTO DAL CATALOGO --->\n")
-    titolo=input("Quale titolo vuoi cancellare?").lower().capitalize()
+    titolo=input("Quale titolo vuoi cancellare?\n> ").lower().capitalize()
     for record in catalogo:
         if(record['titolo']==titolo):
                 catalogo.remove(record)
@@ -157,13 +156,13 @@ def printCatalogo(catalogo):
             print(f"Episodi: {record['episodi']}")
         print(f"Data di inserimento: {record['data_inserimento']}")
         print(f"Data di modifica: {record['data_modifica']}")
-        print(f"Visualizzazioni: {record['visualizzazioni']}")
+        print(f"Visualizzazioni: {record['visualizzazioni']}\n\n")
        
 def main():
     catalogo=[]
     scelta=1
     while scelta!=0:
-        print("0 - Esci")
+        print("\n\n0 - Esci")
         print("1 - Inserisci film o serie TV")
         print("2 - Modifica contenuto")
         print("3 - Rimuovi contenuto")
