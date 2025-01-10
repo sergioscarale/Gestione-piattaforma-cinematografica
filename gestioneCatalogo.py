@@ -1,5 +1,7 @@
 import gestioneData
 from catalogo import *
+from ricerca import menuRicerca 
+from statistiche import menuStatistiche
 
 def printGeneri(genereCatalogo):
     listaGeneri=[]
@@ -60,7 +62,7 @@ def inserimentoCatalogo(catalogo):
     if not protagonista:
         print("Inserisci un protagonista valido")
         return
-    
+
     data_uscita=gestioneData.dataUscita()
 
     while True:
@@ -79,7 +81,6 @@ def inserimentoCatalogo(catalogo):
 
 def menuModificaCatalogo(catalogo):
     print("<--- MODIFICA CATALOGO --->\n")
-    print("\n<--- MENU' --->")
     scelta=1
     while scelta!=0:
         print("0 - Esci")
@@ -156,25 +157,5 @@ def printCatalogo(catalogo):
             print(f"Episodi: {record['episodi']}")
         print(f"Data di inserimento: {record['data_inserimento']}")
         print(f"Data di modifica: {record['data_modifica']}")
-        print(f"Visualizzazioni: {record['visualizzazioni']}\n\n")
+        print(f"Visualizzazioni: {record['visualizzazioni']}\n")
        
-def main():
-    catalogo=[]
-    scelta=1
-    while scelta!=0:
-        print("\n\n0 - Esci")
-        print("1 - Inserisci film o serie TV")
-        print("2 - Modifica contenuto")
-        print("3 - Rimuovi contenuto")
-        print("4 - Print catalogo")
-        scelta=int(input("\n> "))
-        match(scelta):
-            case 0: print("ciao ciao")
-            case 1: inserimentoCatalogo(catalogo)
-            case 2: menuModificaCatalogo(catalogo)
-            case 3: eliminaCatalogo(catalogo)
-            case 4: printCatalogo(catalogo)
-            case __: print("errore!")
-
-if(__name__=="__main__"):
-    main()
